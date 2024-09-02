@@ -1,0 +1,16 @@
+{
+ "name": "Watermark-AstroPeliculasOficial",
+ "version": "0.4.7",
+ "description": "An application in Express, simple to mark images with water using jimp, for @AstroPeliculasOf",
+ "main": "app.js",
+ "scripts": {
+  "start": "node app.js"
+ },
+ "dependencies": {
+  "express": "^4.17.1",
+  "jimp": "^0.16.1",
+  "sharp": "^0.31.3",
+  "path": "^0.12.7"
+ },
+ "license": "MIT"
+}
