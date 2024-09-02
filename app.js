@@ -20,9 +20,6 @@ app.get('/p', async (req, res) => {
   return res.status(400).json({ error: 'No se proporcionó un enlace' });
  }
 
- // Agrega este console.log
- console.log(`Se solicitó la siguiente imagen: '${url}' en la ruta '/p'`);
-
  try {
   // Cargar la imagen desde el enlace
   const image = await jimp.read(url);
@@ -77,6 +74,9 @@ app.get('/p', async (req, res) => {
   console.error('Error al procesar las imágenes:', error);
   res.status(500).json({ error: 'Error al generar la imagen CATCH' });
  }
+
+ // Agrega este console.log
+ console.log(`Se solicitó la siguiente imagen: '${url}' en la ruta '/p'`);
 });
 
 //=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=\\
@@ -89,9 +89,6 @@ app.get('/b', async (req, res) => {
  if (!url) {
   return res.status(400).json({ error: 'No se proporcionó un enlace' });
  }
-
- // Agrega este console.log
- console.log(`Se solicitó la siguiente imagen: '${url}' en la ruta '/b'`);
 
  try {
   // Cargar la imagen desde el enlace
@@ -147,6 +144,9 @@ app.get('/b', async (req, res) => {
   console.error('Error al procesar las imágenes:', error);
   res.status(500).json({ error: 'Error al generar la imagen CATCH' });
  }
+
+ // Agrega este console.log
+ console.log(`Se solicitó la siguiente imagen: '${url}' en la ruta '/b'`);
 });
 
 //=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=\\
