@@ -181,8 +181,8 @@ app.get('/small_p', async (req, res) => {
   const image = await jimp.read(url);
   image.resize(500, 750, jimp.RESIZE_MAGPHASE);
 
-  const watermark1 = await jimp.read('Wtxt-Backdrop.png');
-  const watermark2 = await jimp.read('Wlogo-Backdrop-2.png');
+  const watermark1 = await jimp.read('Wtxt-poster.png');
+  const watermark2 = await jimp.read('Wlogo-poster.png');
   watermark1.resize(500, 750);
   watermark2.resize(500, 750);
   watermark1.opacity(0.12);
