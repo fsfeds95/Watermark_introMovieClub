@@ -108,7 +108,7 @@ app.get('/b', async (req, res) => {
   image.resize(1280, 720, jimp.RESIZE_MAGPHASE);
 
   const watermark1 = await jimp.read('Wtxt-Backdrop.png');
-  const watermark2 = await jimp.read('Wlogo-Backdrop-2.png');
+  const watermark2 = await jimp.read('Wlogo-Backdrop-3.png');
   watermark1.resize(1280, 720);
   watermark2.resize(1280, 720);
   watermark1.opacity(0.12);
@@ -256,7 +256,7 @@ app.get('/small_b', async (req, res) => {
   image.resize(500, 281, jimp.RESIZE_MAGPHASE);
 
   const watermark1 = await jimp.read('Wtxt-Backdrop.png');
-  const watermark2 = await jimp.read('Wlogo-Backdrop-2.png');
+  const watermark2 = await jimp.read('Wlogo-Backdrop-3.png');
   watermark1.resize(500, 281);
   watermark2.resize(500, 281);
   watermark1.opacity(0.12);
