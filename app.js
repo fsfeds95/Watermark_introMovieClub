@@ -113,10 +113,13 @@ app.get('/b', async (req, res) => {
 
   const watermark1 = await jimp.read('Wtxt-Backdrop.png');
   const watermark2 = await jimp.read('Wlogo-Backdrop-3.png');
-  watermark1.resize(500, 281);
-  watermark2.resize(500, 281);
+
+  watermark1.resize(1280, 720);
+  watermark2.resize(1280, 720);
+
   watermark1.opacity(0.12);
   watermark2.opacity(0.75);
+
   watermark1.composite(watermark2, 0, 0, {
    mode: jimp.BLEND_SOURCE_OVER,
    opacitySource: 1.0,
@@ -171,33 +174,31 @@ app.get('/b', async (req, res) => {
 // Ruta "/logo?url=ENLACE&logoUrl=ENLACE&x=50&y=50"
 // Ruta "/logo" para combinar funcionalidades
 app.get('/logo', async (req, res) => {
- const { url, logoUrl, x = 0, y = 0 } = req.query;
-
- // Convertir X y Y a números
- const xPos = parseInt(x, 10);
- const yPos = parseInt(y, 10);
+ const url = req.query.url;
 
  if (!url || !logoUrl) {
   return res.status(400).json({ error: 'Faltan enlaces de imagen' });
  }
 
- console.log(`Se solicitó la siguientes imagen: '${url}' y '${logoUrl}' en la ruta '/logo'`);
+ if (imageCache[url] || imageCache[logoUrl]) {
+  return res.send(imageCache[url]);
+
+  return res.send(imageCache[logoUrl]);
+ }
 
  try {
   // Cargar la imagen desde el enlace
   const image = await jimp.read(url);
   // Cargar el logo desde el enlace
   const logoImg = await jimp.read(logoUrl);
+  // Cargar las marcas de agua
+  const wm1 = await jimp.read('Wtxt-Backdrop.png');
+  const wm2 = await jimp.read('Wlogo-Backdrop-3.png');
 
   // Redimensionar la imagen usando RESIZE_MAGPHASE
   image.resize(1280, 720, jimp.RESIZE_MAGPHASE);
 
-  // Redimensionar la imagen usando RESIZE_MAGPHASE
   logoImg.resize(543, 188, jimp.RESIZE_MAGPHASE);
-
-  // Cargar las marcas de agua
-  const wm1 = await jimp.read('Wtxt-Backdrop.png');
-  const wm2 = await jimp.read('Wlogo-Backdrop-3.png');
 
   wm1.resize(1280, 720);
   wm2.resize(1280, 720);
@@ -270,9 +271,8 @@ app.get('/logo', async (req, res) => {
 // Ruta "/ping" para mantener la conexión activa
 app.get('/ping', (req, res) => {
  // Aquí puedes hacer algo simple, como enviar una respuesta vacía
- const currentDate = new Date();
- const formattedTime = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()} - ${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`;
- console.log(`Sigo vivo 🎉 (${formattedTime})`);
+ const currentDate = new Date().toLocaleString("es-VE", { timeZone: "America/Caracas" });
+ console.log(`Sigo vivo 🎉 (${currentDate})`);
  res.send('');
 });
 
@@ -285,12 +285,11 @@ app.listen(port, () => {
  setInterval(() => {
   fetch(`http://localhost:${port}/ping`)
    .then(response => {
-    const currentDate = new Date();
-    const formattedTime = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()} - ${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`;
-    console.log(`Sigo vivo 🎉 (${formattedTime})`);
+    const currentDate = new Date().toLocaleString("es-VE", { timeZone: "America/Caracas" });
+    console.log(`Sigo vivo 🎉 (${currentDate})`);
    })
    .catch(error => {
     console.error('Error en la solicitud de ping:', error);
    });
- }, 1 * 60 * 1000);
+ }, 0 * 30 * 1000);
 });
