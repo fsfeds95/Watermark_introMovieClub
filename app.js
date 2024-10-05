@@ -68,7 +68,7 @@ app.get('/p', async (req, res) => {
    if (err) {
     return res.status(500).json({ error: 'Error al generar la imagen BUFFER' });
    }
-   res.header('Content-Type', 'image/jpeg', 'Content-Disposition', `inline; filename="${fileName}"`);
+   res.header('Content-Type', 'image/jpeg', 'Content-Disposition', `attachment; filename="${fileName}"`);
    res.send(buffer);
   });
  } catch (error) {
@@ -136,7 +136,7 @@ app.get('/b', async (req, res) => {
    if (err) {
     return res.status(500).json({ error: 'Error al generar la imagen BUFFER' });
    }
-   res.header('Content-Type', 'image/jpeg', 'Content-Disposition', `inline; filename="${fileName}"`);
+   res.header('Content-Type', 'image/jpeg', 'Content-Disposition', `attachment; filename="${fileName}"`);
    res.send(buffer);
   });
  } catch (error) {
@@ -215,7 +215,7 @@ app.get('/logo', async (req, res) => {
    if (err) {
     return res.status(500).json({ error: 'Error al generar la imagen BUFFER' });
    }
-   res.header('Content-Type', 'image/jpeg', 'Content-Disposition', `inline; filename="${fileName}"`);
+   res.header('Content-Type', 'image/jpeg', 'Content-Disposition', `attachment; filename="${fileName}"`);
    res.send(buffer);
   });
  } catch (error) {
