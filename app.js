@@ -83,8 +83,8 @@ app.get('/p', async (req, res) => {
     .catch(err => res.send('¡Ups! Algo salió mal al convertir la imagen: ' + err));
   }).catch(err => res.send('¡Error al obtener la imagen: ' + err));
  } catch (error) {
-  console.error('Error al procesar las imágenes:', error);
-  res.status(500).json({ error: 'Error al generar la imagen CATCH' });
+  console.error('Error al procesar las imágenes:', error.message); // Muestra el mensaje del error
+  res.status(500).json({ error: 'Error al generar la imagen CATCH', details: error.message });
  }
 });
 
@@ -157,8 +157,8 @@ app.get('/b', async (req, res) => {
     .catch(err => res.send('¡Ups! Algo salió mal al convertir la imagen: ' + err));
   }).catch(err => res.send('¡Error al obtener la imagen: ' + err));
  } catch (error) {
-  console.error('Error al procesar las imágenes:', error);
-  res.status(500).json({ error: 'Error al generar la imagen CATCH' });
+  console.error('Error al procesar las imágenes:', error.message); // Muestra el mensaje del error
+  res.status(500).json({ error: 'Error al generar la imagen CATCH', details: error.message });
  }
 });
 
@@ -228,10 +228,10 @@ app.get('/logo', async (req, res) => {
             res.header('Content-Type', 'image/jpeg', 'Content-Disposition', `attachment; filename="${fileName}"`);
             res.send(buffer);
         });
-    } catch (error) {
-        console.error('Error al procesar las imágenes:', error);
-        res.status(500).json({ error: 'Error al generar la imagen CATCH' });
-    }
+ } catch (error) {
+  console.error('Error al procesar las imágenes:', error.message); // Muestra el mensaje del error
+  res.status(500).json({ error: 'Error al generar la imagen CATCH', details: error.message });
+ }
 });
 
 //=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=\\
