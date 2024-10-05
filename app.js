@@ -166,68 +166,75 @@ app.get('/b', async (req, res) => {
 
 // Ruta "/logo?url=ENLACE&logoUrl=ENLACE&x=50&y=50"
 app.get('/logo', async (req, res) => {
-    const { url, logoUrl, x = 0, y = 0 } = req.query;
+ const { url, logoUrl, x = 0, y = 0 } = req.query;
 
-    if (!url || !logoUrl) {
-        return res.status(400).json({ error: 'Faltan enlaces de imagen' });
-    }
+ // Convertir X y Y a números
+ const xPos = parseInt(x, 10);
+ const yPos = parseInt(y, 10);
 
-    console.log(`Se solicitó la siguiente imagen: '${url}' y '${logoUrl}' en la ruta '/logo'`);
+ if (!url || !logoUrl) {
+  return res.status(400).json({ error: 'Faltan enlaces de imagen' });
+ }
 
-    try {
-        // Cargar la imagen desde el enlace
-        const image = await jimp.read(url);
-        // Cargar el logo desde el enlace
-        const logoImg = await jimp.read(logoUrl);
+ console.log(`Se solicitó la siguientes imagen: '${url}' y '${logoUrl}' en la ruta '/logo'`);
 
-        // Redimensionar la imagen usando RESIZE_MAGPHASE
-        image.resize(1280, 720, jimp.RESIZE_MAGPHASE);
-        // Redimensionar el logo
-        logoImg.resize(543, 188, jimp.RESIZE_MAGPHASE);
+ try {
+  // Cargar la imagen desde el enlace
+  const image = await jimp.read(url);
+  // Cargar el logo desde el enlace
+  const logoImg = await jimp.read(logoUrl);
 
-        // Cargar las marcas de agua
-        const wm1 = await jimp.read('Wtxt-Backdrop.png');
-        const wm2 = await jimp.read('Wlogo-Backdrop.png');
+  // Redimensionar la imagen usando RESIZE_MAGPHASE
+  image.resize(1280, 720, jimp.RESIZE_MAGPHASE);
 
-        wm1.resize(1280, 720);
-        wm2.resize(1280, 720);
+  // Redimensionar la imagen usando RESIZE_MAGPHASE
+  logoImg.resize(543, 188, jimp.RESIZE_MAGPHASE);
 
-        wm1.opacity(0.08);
-        wm2.opacity(0.40);
+  // Cargar las marcas de agua
+  const wm1 = await jimp.read('Wtxt-Backdrop.png');
+  const wm2 = await jimp.read('Wlogo-Backdrop.png');
 
-        // Combinar el logo como primera marca
-        image.composite(logoImg, x, y, {
-            mode: jimp.BLEND_SOURCE_OVER,
-            opacitySource: 1.0,
-            opacityDest: 1.0
-        });
+  wm1.resize(1280, 720);
+  wm2.resize(1280, 720);
 
-        // Combinar wm1 como segunda marca
-        image.composite(wm1, 0, 0, {
-            mode: jimp.BLEND_SOURCE_OVER,
-            opacitySource: 1.0,
-            opacityDest: 1.0
-        });
+  wm1.opacity(0.08);
+  wm2.opacity(0.40);
 
-        // Combinar wm2 como tercera marca
-        image.composite(wm2, 0, 0, {
-            mode: jimp.BLEND_SOURCE_OVER,
-            opacitySource: 1.0,
-            opacityDest: 1.0
-        });
+  // Combinar las marcas de agua en una sola imagen
+  // Combinar el logo como primera marca
+  image.composite(logoImg, xPos, yPos, {
+   mode: jimp.BLEND_SOURCE_OVER,
+   opacitySource: 1.0,
+   opacityDest: 1.0
+  });
 
-        const randomNumber = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
-        const fileName = `backdrop_${randomNumber}.jpeg`;
+  // Combinar wm1 como segunda marca
+  image.composite(wm1, 0, 0, {
+   mode: jimp.BLEND_SOURCE_OVER,
+   opacitySource: 1.0,
+   opacityDest: 1.0
+  });
 
-        image.quality(100).scale(1).write(fileName);
+  // Combinar wm2 como tercera marca
+  image.composite(wm2, 0, 0, {
+   mode: jimp.BLEND_SOURCE_OVER,
+   opacitySource: 1.0,
+   opacityDest: 1.0
+  });
 
-        image.getBuffer(jimp.MIME_JPEG, (err, buffer) => {
-            if (err) {
-                return res.status(500).json({ error: 'Error al generar la imagen BUFFER' });
-            }
-            res.header('Content-Type', 'image/jpeg', 'Content-Disposition', `attachment; filename="${fileName}"`);
-            res.send(buffer);
-        });
+
+  const randomNumber = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+  const fileName = `backdrop_${randomNumber}.jpeg`;
+
+  image.quality(100).scale(1).write(fileName);
+
+  image.getBuffer(jimp.MIME_JPEG, (err, buffer) => {
+   if (err) {
+    return res.status(500).json({ error: 'Error al generar la imagen BUFFER' });
+   }
+   res.header('Content-Type', 'image/jpeg', 'Content-Disposition', `attachment; filename="${fileName}"`);
+   res.send(buffer);
+  });
  } catch (error) {
   console.error('Error al procesar las imágenes:', error.message); // Muestra el mensaje del error
   res.status(500).json({ error: 'Error al generar la imagen CATCH', details: error.message });
