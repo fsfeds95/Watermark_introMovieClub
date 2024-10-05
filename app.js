@@ -14,7 +14,7 @@ app.use(express.json());
 // Objeto para almacenar imágenes en caché
 const imageCache = {};
 
-const serverUrl = window.location.origin;
+const serverUrl = `${req.protocol}://${req.get('host')}`;
 
 //=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=\\
 
