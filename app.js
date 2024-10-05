@@ -14,13 +14,13 @@ app.use(express.json());
 // Objeto para almacenar imágenes en caché
 const imageCache = {};
 
-const serverUrl = `${req.protocol}://${req.get('host')}`;
-
 //=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=\\
 
 // Ruta "/p?url=IMG"
 // Ruta "/p" para combinar funcionalidades
 app.get('/p', async (req, res) => {
+
+ const serverUrl = `${req.protocol}://${req.get('host')}`;
  const url = req.query.url;
 
  if (!url) {
@@ -100,6 +100,7 @@ app.get('/p', async (req, res) => {
 // Ruta "/b?url=IMG"
 // Ruta "/b" para combinar funcionalidades
 app.get('/b', async (req, res) => {
+ const serverUrl = `${req.protocol}://${req.get('host')}`;
  const url = req.query.url;
 
  if (!url) {
@@ -178,6 +179,7 @@ app.get('/b', async (req, res) => {
 // Ruta "/logo?url=ENLACE&logoUrl=ENLACE&x=50&y=50"
 // Ruta "/logo" para combinar funcionalidades
 app.get('/logo', async (req, res) => {
+ const serverUrl = `${req.protocol}://${req.get('host')}`;
  const { url, logoUrl, x = 0, y = 0 } = req.query;
 
  // Convertir X y Y a números
@@ -282,8 +284,10 @@ app.get('/logo', async (req, res) => {
 // Ruta "/ping" para mantener la conexión activa
 app.get('/ping', (req, res) => {
  // Aquí puedes hacer algo simple, como enviar una respuesta vacía
+
+ const serverUrl = `${req.protocol}://${req.get('host')}`;
  const currentDate = new Date().toLocaleString("es-VE", { timeZone: "America/Caracas" });
- console.log(`Sigo vivo 🎉 (${currentDate})`);
+ console.log(`Sigo vivo en ${serverUrl}/ping\n\n(${currentDate})`);
  res.send('');
 });
 
@@ -294,7 +298,7 @@ app.listen(port, () => {
  console.log(`Servidor iniciado en http://localhost:${port}`);
 
  setInterval(() => {
-  fetch(`${serverUrl}/ping`)
+  fetch(`https://localhost:${port}/ping`)
    .then(response => {
     const currentDate = new Date().toLocaleString("es-VE", { timeZone: "America/Caracas" });
     console.log(`Sigo vivo 🎉 (${currentDate})`);
