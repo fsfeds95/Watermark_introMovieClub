@@ -291,5 +291,5 @@ app.listen(port, () => {
    .catch(error => {
     console.error('Error en la solicitud de ping:', error);
    });
- }, 1 * 60 * 1000);
+ }, 2 * 60 * 1000);
 });
