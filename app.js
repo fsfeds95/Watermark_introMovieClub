@@ -69,8 +69,6 @@ app.get('/p', async (req, res) => {
    res.send(buffer);
   });
 
-  console.log(`Se solicitó la siguiente imagen: '${url}' en la ruta '/p'`);
-
   // Convertir la imagen a formato WEBP
   axios({
    // Cambiar la URL base si es necesario
@@ -86,6 +84,8 @@ app.get('/p', async (req, res) => {
     })
     .catch(err => res.send('¡Ups! Algo salió mal al convertir la imagen: ' + err));
   }).catch(err => res.send('¡Error al obtener la imagen: ' + err));
+
+  console.log(`Se solicitó la siguiente imagen: '${url}' en la ruta '/p'`);
  } catch (error) {
   console.error('Error al procesar las imágenes:', error);
   res.status(500).json({ error: 'Error al generar la imagen CATCH' });
@@ -146,8 +146,6 @@ app.get('/b', async (req, res) => {
    res.send(buffer);
   });
 
-  console.log(`Se solicitó la siguiente imagen: '${url}' en la ruta '/small_b'`);
-
   // Convertir la imagen a formato WEBP
   axios({
    // Cambiar la URL base si es necesario
@@ -163,6 +161,8 @@ app.get('/b', async (req, res) => {
     })
     .catch(err => res.send('¡Ups! Algo salió mal al convertir la imagen: ' + err));
   }).catch(err => res.send('¡Error al obtener la imagen: ' + err));
+
+  console.log(`Se solicitó la siguiente imagen: '${url}' en la ruta '/b'`);
  } catch (error) {
   console.error('Error al procesar las imágenes:', error);
   res.status(500).json({ error: 'Error al generar la imagen CATCH' });
@@ -181,8 +181,10 @@ app.get('/logo', async (req, res) => {
  }
 
  if (imageCache[url] || imageCache[logoUrl]) {
-  return res.send(imageCache[url]);
+  return res.send(imageCache[logoUrl]);
+ }
 
+ if (imageCache[logoUrl]) {
   return res.send(imageCache[logoUrl]);
  }
 
@@ -260,6 +262,8 @@ app.get('/logo', async (req, res) => {
     })
     .catch(err => res.send('¡Ups! Algo salió mal al convertir la imagen: ' + err));
   }).catch(err => res.send('¡Error al obtener la imagen: ' + err));
+
+  console.log(`Se solicitó la siguiente imagen: '${url}' y '${logoUrl}' en la ruta '/logo'`);
  } catch (error) {
   console.error('Error al procesar las imágenes:', error);
   res.status(500).json({ error: 'Error al generar la imagen CATCH' });
