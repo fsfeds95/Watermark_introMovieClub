@@ -205,7 +205,6 @@ app.get('/logo', async (req, res) => {
    opacityDest: 1.0
   });
 
-
   const randomNumber = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
   const fileName = `backdrop_${randomNumber}.jpeg`;
 
@@ -215,12 +214,15 @@ app.get('/logo', async (req, res) => {
    if (err) {
     return res.status(500).json({ error: 'Error al generar la imagen BUFFER' });
    }
-   res.header('Content-Type', 'image/jpeg', 'Content-Disposition', `attachment; filename="${fileName}"`);
+   res.header(
+    'Content-Type', 'image/jpeg',
+    'Content-Disposition', `attachment; filename="${fileName}"`
+   );
    res.send(buffer);
   });
  } catch (error) {
-  console.error('Error al procesar las imágenes:', error.message); // Muestra el mensaje del error
-  res.status(500).json({ error: 'Error al generar la imagen CATCH', details: error.message });
+  console.error('Error al procesar las imágenes:', error);
+  res.status(500).json({ error: 'Error al generar la imagen CATCH' });
  }
 });
 
