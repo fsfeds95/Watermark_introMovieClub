@@ -174,13 +174,17 @@ app.get('/b', async (req, res) => {
 // Ruta "/logo?url=ENLACE&logoUrl=ENLACE&x=50&y=50"
 // Ruta "/logo" para combinar funcionalidades
 app.get('/logo', async (req, res) => {
- const url = req.query.url;
+ const { url, logoUrl, x = 0, y = 0 } = req.query;
+
+ // Convertir X y Y a números
+ const xPos = parseInt(x, 10);
+ const yPos = parseInt(y, 10);
 
  if (!url || !logoUrl) {
   return res.status(400).json({ error: 'Faltan enlaces de imagen' });
  }
 
- if (imageCache[url] || imageCache[logoUrl]) {
+ if (imageCache[url]) {
   return res.send(imageCache[logoUrl]);
  }
 
@@ -250,7 +254,7 @@ app.get('/logo', async (req, res) => {
   // Convertir la imagen a formato WEBP
   axios({
    // Cambiar la URL base si es necesario
-   url: `http://localhost:8225/small_b?url=${url}`,
+   url: `http://localhost:8225/logo?url=${url}&logoUrl=${logoUrl}`,
    responseType: 'arraybuffer'
   }).then(response => {
    sharp(response.data)
