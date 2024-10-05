@@ -149,7 +149,7 @@ app.get('/b', async (req, res) => {
   // Convertir la imagen a formato WEBP
   axios({
    // Cambiar la URL base si es necesario
-   url: `http://localhost:8225/small_b?url=${url}`,
+   url: `http://localhost:8225/b?url=${url}`,
    responseType: 'arraybuffer'
   }).then(response => {
    sharp(response.data)
