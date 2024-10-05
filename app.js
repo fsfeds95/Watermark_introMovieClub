@@ -14,6 +14,8 @@ app.use(express.json());
 // Objeto para almacenar imágenes en caché
 const imageCache = {};
 
+const serverUrl = window.location.origin;
+
 //=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=•=\\
 
 // Ruta "/p?url=IMG"
@@ -72,7 +74,7 @@ app.get('/p', async (req, res) => {
   // Convertir la imagen a formato WEBP
   axios({
    // Cambiar la URL base si es necesario
-   url: `http://localhost:8225/p?url=${url}`,
+   url: `${serverUrl}/p?url=${url}`,
    responseType: 'arraybuffer'
   }).then(response => {
    sharp(response.data)
@@ -86,6 +88,7 @@ app.get('/p', async (req, res) => {
   }).catch(err => res.send('¡Error al obtener la imagen: ' + err));
 
   console.log(`Se solicitó la siguiente imagen: '${url}' en la ruta '/p'`);
+  console.log(`servidor activo en ${serverUrl}`);
  } catch (error) {
   console.error('Error al procesar las imágenes:', error);
   res.status(500).json({ error: 'Error al generar la imagen CATCH' });
@@ -149,7 +152,7 @@ app.get('/b', async (req, res) => {
   // Convertir la imagen a formato WEBP
   axios({
    // Cambiar la URL base si es necesario
-   url: `http://localhost:8225/b?url=${url}`,
+   url: `${serverUrl}/b?url=${url}`,
    responseType: 'arraybuffer'
   }).then(response => {
    sharp(response.data)
@@ -163,6 +166,7 @@ app.get('/b', async (req, res) => {
   }).catch(err => res.send('¡Error al obtener la imagen: ' + err));
 
   console.log(`Se solicitó la siguiente imagen: '${url}' en la ruta '/b'`);
+  console.log(`servidor activo en ${serverUrl}`);
  } catch (error) {
   console.error('Error al procesar las imágenes:', error);
   res.status(500).json({ error: 'Error al generar la imagen CATCH' });
@@ -249,12 +253,10 @@ app.get('/logo', async (req, res) => {
    res.send(buffer);
   });
 
-  console.log(`Se solicitó la siguiente imagen: '${url}' y ${logoUrl} en la ruta '/logo'`);
-
   // Convertir la imagen a formato WEBP
   axios({
    // Cambiar la URL base si es necesario
-   url: `http://localhost:8225/logo?url=${url}&logoUrl=${logoUrl}`,
+   url: `${serverUrl}/logo?url=${url}&logoUrl=${logoUrl}`,
    responseType: 'arraybuffer'
   }).then(response => {
    sharp(response.data)
@@ -268,6 +270,7 @@ app.get('/logo', async (req, res) => {
   }).catch(err => res.send('¡Error al obtener la imagen: ' + err));
 
   console.log(`Se solicitó la siguiente imagen: '${url}' y '${logoUrl}' en la ruta '/logo'`);
+  console.log(`servidor activo en ${serverUrl}`);
  } catch (error) {
   console.error('Error al procesar las imágenes:', error);
   res.status(500).json({ error: 'Error al generar la imagen CATCH' });
@@ -291,7 +294,7 @@ app.listen(port, () => {
  console.log(`Servidor iniciado en http://localhost:${port}`);
 
  setInterval(() => {
-  fetch(`http://localhost:${port}/ping`)
+  fetch(`${serverUrl}/ping`)
    .then(response => {
     const currentDate = new Date().toLocaleString("es-VE", { timeZone: "America/Caracas" });
     console.log(`Sigo vivo 🎉 (${currentDate})`);
@@ -299,5 +302,5 @@ app.listen(port, () => {
    .catch(error => {
     console.error('Error en la solicitud de ping:', error);
    });
- }, 2 * 60 * 1000);
+ }, 5 * 60 * 1000);
 });
